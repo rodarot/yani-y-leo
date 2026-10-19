@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yani y Leo · Nuestro Casamiento</title>
+<meta name="description" content="Queremos que vos seas parte de este día tan especial. 04/12/26 · O'Higgins 914, Lanús.">
+
+<!-- Vista previa en WhatsApp (reemplazar USUARIO y REPO por los tuyos) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yani y Leo · Nuestro Casamiento">
+<meta property="og:description" content="Queremos que vos seas parte de este día tan especial. 04/12/26 · Lanús.">
+<meta property="og:image" content="https://USUARIO.github.io/REPO/preview.jpg">
+<meta property="og:image:width" content="534">
+<meta property="og:image:height" content="800">
+<meta property="og:url" content="https://USUARIO.github.io/REPO/">
+<meta name="theme-color" content="#fbfaf8">
+
+<style>
+  :root { --crema:#fbfaf8; --oro:#b8903f; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; background:var(--crema); }
+  body {
+    display:flex; align-items:center; justify-content:center;
+    min-height:100dvh; overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  /* La tarjeta mantiene la proporción de la invitación (1068 x 1600) */
+  .tarjeta {
+    position:relative;
+    width:min(100vw, calc(100dvh * 1068 / 1600));
+    aspect-ratio:1068 / 1600;
+    background:url("invitacion-fondo.jpg") center / cover no-repeat;
+    box-shadow:0 10px 40px rgba(80,70,40,.12);
+  }
+
+  /* Halo dorado que late suave detrás de los anillos */
+  .halo {
+    position:absolute; left:50.1%; top:65.6%;
+    width:66%; aspect-ratio:1.4;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse at center,
+      rgba(226,190,115,.55) 0%, rgba(226,190,115,.25) 38%, rgba(226,190,115,0) 70%);
+    animation:latido 3.2s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes latido {
+    0%,100% { opacity:.75; transform:translate(-50%,-50%) scale(.94); }
+    50%     { opacity:1;   transform:translate(-50%,-50%) scale(1.06); }
+  }
+
+  /* Anillos: zona tocable + giro sobre su eje */
+  .anillos {
+    position:absolute; left:29.96%; top:55.63%;
+    width:40.26%; height:20.31%;
+    border:0; background:none; cursor:pointer;
+    perspective:900px;
+  }
+  .anillos img {
+    width:100%; height:100%; display:block;
+    animation:giro 6s linear infinite;
+    filter:drop-shadow(0 6px 10px rgba(150,110,40,.25));
+    transform-style:preserve-3d;
+  }
+  @keyframes giro {
+    from { transform:rotateY(0deg); }
+    to   { transform:rotateY(360deg); }
+  }
+  .anillos:focus-visible { outline:2px dashed var(--oro); outline-offset:6px; border-radius:12px; }
+
+  /* Manito dorada señalando los anillos */
+  .manito {
+    position:absolute; left:67.2%; top:68.2%;
+    width:9.5%; pointer-events:none;
+    animation:toque 1.6s ease-in-out infinite;
+    transform-origin:20% 20%;
+  }
+  @keyframes toque {
+    0%,100% { transform:translate(0,0) rotate(-38deg); }
+    50%     { transform:translate(-8%,-6%) rotate(-38deg) scale(.93); }
+  }
+
+  /* Ventana con la tarjeta del regalo */
+  .modal {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    padding:20px; background:rgba(40,36,25,.55);
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    opacity:0; visibility:hidden; transition:opacity .35s, visibility .35s;
+    z-index:10;
+  }
+  .modal.abierto { opacity:1; visibility:visible; }
+  .modal img {
+    max-width:min(92vw, 720px); max-height:80dvh; width:auto; height:auto;
+    border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.35);
+    transform:scale(.92); transition:transform .35s ease;
+  }
+  .modal.abierto img { transform:scale(1); }
+  .cerrar {
+    position:absolute; top:max(16px, env(safe-area-inset-top)); right:16px;
+    width:44px; height:44px; border-radius:50%; border:0;
+    background:rgba(255,255,255,.9); color:#5b4a22; font-size:24px; line-height:44px;
+    cursor:pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anillos img, .halo, .manito { animation:none; }
+  }
+</style>
+</head>
+<body>
+  <main class="tarjeta" aria-label="Invitación al casamiento de Yani y Leo">
+    <div class="halo"></div>
+
+    <button class="anillos" id="abrir" aria-label="Ver mensaje sobre el regalo">
+      <img src="anillos.png" alt="Dos anillos dorados en forma de corazón entrelazados">
+    </button>
+
+    <svg class="manito" viewBox="-2 -6 96 104" fill="none" stroke="#b8903f" stroke-width="3.6"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M40 60V20c0-8 12-8 12 0v27M52 40c0-8 12-8 12 0v9M64 44c0-8 12-8 12 0v8M76 50c0-8 12-8 12 0v16c0 18-8 29-24 29h-8c-10 0-16-6-22-14L22 65c-4-6 4-12 9-8l9 9"/>
+      <path d="M46 6v-8M33 10l-5-6M59 10l5-6"/>
+    </svg>
+  </main>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Regalo">
+    <button class="cerrar" id="cerrar" aria-label="Cerrar">×</button>
+    <img src="regalo.jpg" alt="Tu presencia es nuestro mejor regalo. Pero si deseas hacernos un presente, Alias: luhananoah1986">
+  </div>
+
+<script>
+  const modal = document.getElementById('modal');
+  document.getElementById('abrir').addEventListener('click', () => modal.classList.add('abierto'));
+  modal.addEventListener('click', () => modal.classList.remove('abierto'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('abierto'); });
+</script>
+</body>
+</html>
