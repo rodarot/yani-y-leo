@@ -15,15 +15,19 @@
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://rodarot.github.io/yani-y-leo/">
 <meta name="theme-color" content="#fbfaf8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
 
 <style>
   :root { --crema:#fbfaf8; --oro:#b8903f; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html, body { height:100%; background:var(--crema); }
-  body {
+  html { background:var(--crema); scroll-behavior:smooth; }
+  body { background:var(--crema); -webkit-tap-highlight-color:transparent; }
+
+  .portada {
+    position:relative; min-height:100dvh;
     display:flex; align-items:center; justify-content:center;
-    min-height:100dvh; overflow:hidden;
-    -webkit-tap-highlight-color:transparent;
   }
 
   /* La tarjeta mantiene la proporción de la invitación (1068 x 1600) */
@@ -81,7 +85,55 @@
     50%     { transform:translate(-8%,-6%) rotate(-38deg) scale(.93); }
   }
 
-  /* Ventana con la tarjeta del regalo */
+  /* Texto "Tocá los anillos" entre los anillos y "Confirmar asistencia" */
+  .indicacion {
+    position:absolute; left:50%; top:74.3%; transform:translateX(-50%); z-index:2;
+    border:0; background:none; cursor:pointer; white-space:nowrap;
+    font-family:"Cormorant Garamond", Georgia, serif; font-style:italic; font-weight:600;
+    font-size:clamp(13px, 3.1vmin, 22px); color:var(--oro); letter-spacing:.03em;
+    animation:brillo 2.4s ease-in-out infinite;
+  }
+  @keyframes brillo { 0%,100% { opacity:.6; } 50% { opacity:1; } }
+
+  /* Flecha "deslizá" al pie de la primera pantalla */
+  .deslizar {
+    position:absolute; left:50%; bottom:max(14px, env(safe-area-inset-bottom));
+    transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    padding:6px 16px 4px; border-radius:999px;
+    background:rgba(251,250,248,.88); box-shadow:0 2px 12px rgba(80,70,40,.15);
+    color:var(--oro); text-decoration:none;
+    font-family:"Cormorant Garamond", Georgia, serif; font-weight:600;
+    font-size:13px; letter-spacing:.12em; text-transform:uppercase;
+    transition:opacity .4s;
+  }
+  .deslizar svg { width:20px; height:20px; animation:rebote 1.6s ease-in-out infinite; }
+  @keyframes rebote { 0%,100% { transform:translateY(0); } 50% { transform:translateY(5px); } }
+  .deslizar.oculto { opacity:0; pointer-events:none; }
+
+  /* Sección del regalo */
+  .regalo {
+    min-height:100dvh; padding:48px 18px 56px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px;
+    text-align:center;
+  }
+  .regalo h2 {
+    font-family:"Cormorant Garamond", Georgia, serif; font-weight:500; font-style:italic;
+    font-size:clamp(24px, 6vw, 34px); color:#2f4a36;
+  }
+  .regalo img {
+    width:min(100%, 640px); height:auto; border-radius:14px;
+    box-shadow:0 14px 40px rgba(80,70,40,.18);
+  }
+  .copiar {
+    border:1.5px solid var(--oro); background:transparent; color:#8a6a2a;
+    font-family:"Cormorant Garamond", Georgia, serif; font-weight:600; font-size:18px;
+    padding:10px 26px; border-radius:999px; cursor:pointer; letter-spacing:.04em;
+  }
+  .copiar:active { background:rgba(184,144,63,.12); }
+  .alias { font-family:Georgia, serif; color:#5b4a22; font-size:16px; }
+
+  /* Ventana con la tarjeta del regalo (sin uso) */
   .modal {
     position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
     padding:20px; background:rgba(40,36,25,.55);
@@ -104,35 +156,61 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .anillos img, .halo, .manito { animation:none; }
+    .anillos img, .halo, .manito, .indicacion, .deslizar svg { animation:none; }
+    html { scroll-behavior:auto; }
   }
 </style>
 </head>
 <body>
-  <main class="tarjeta" aria-label="Invitación al casamiento de Yani y Leo">
-    <div class="halo"></div>
+  <section class="portada">
+    <main class="tarjeta" aria-label="Invitación al casamiento de Yani y Leo">
+      <div class="halo"></div>
 
-    <button class="anillos" id="abrir" aria-label="Ver mensaje sobre el regalo">
-      <img src="anillos.png" alt="Dos anillos dorados en forma de corazón entrelazados">
-    </button>
+      <button class="anillos" id="abrir" aria-label="Ver mensaje sobre el regalo">
+        <img src="anillos.png" alt="Dos anillos dorados en forma de corazón entrelazados">
+      </button>
 
-    <svg class="manito" viewBox="-2 -6 96 104" fill="none" stroke="#b8903f" stroke-width="3.6"
-         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M40 60V20c0-8 12-8 12 0v27M52 40c0-8 12-8 12 0v9M64 44c0-8 12-8 12 0v8M76 50c0-8 12-8 12 0v16c0 18-8 29-24 29h-8c-10 0-16-6-22-14L22 65c-4-6 4-12 9-8l9 9"/>
-      <path d="M46 6v-8M33 10l-5-6M59 10l5-6"/>
-    </svg>
-  </main>
+      <svg class="manito" viewBox="-2 -6 96 104" fill="none" stroke="#b8903f" stroke-width="3.6"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M40 60V20c0-8 12-8 12 0v27M52 40c0-8 12-8 12 0v9M64 44c0-8 12-8 12 0v8M76 50c0-8 12-8 12 0v16c0 18-8 29-24 29h-8c-10 0-16-6-22-14L22 65c-4-6 4-12 9-8l9 9"/>
+        <path d="M46 6v-8M33 10l-5-6M59 10l5-6"/>
+      </svg>
 
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Regalo">
-    <button class="cerrar" id="cerrar" aria-label="Cerrar">×</button>
+      <button class="indicacion" id="indicacion">Tocá los anillos</button>
+    </main>
+
+    <a class="deslizar" id="deslizar" href="#regalo">
+      Deslizá
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
+  </section>
+
+  <section class="regalo" id="regalo">
+    <h2>Un detalle para vos</h2>
     <img src="regalo.jpg" alt="Tu presencia es nuestro mejor regalo. Pero si deseas hacernos un presente, Alias: luhananoah1986">
-  </div>
+    <button class="copiar" id="copiar">Copiar alias</button>
+  </section>
 
 <script>
-  const modal = document.getElementById('modal');
-  document.getElementById('abrir').addEventListener('click', () => modal.classList.add('abierto'));
-  modal.addEventListener('click', () => modal.classList.remove('abierto'));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('abierto'); });
+  const regalo = document.getElementById('regalo');
+  const irAlRegalo = () => regalo.scrollIntoView({ behavior:'smooth', block:'start' });
+  document.getElementById('abrir').addEventListener('click', irAlRegalo);
+  document.getElementById('indicacion').addEventListener('click', irAlRegalo);
+
+  const flecha = document.getElementById('deslizar');
+  addEventListener('scroll', () => flecha.classList.toggle('oculto', scrollY > 40), { passive:true });
+
+  const ALIAS = 'luhananoah1986';
+  const boton = document.getElementById('copiar');
+  boton.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(ALIAS); }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = ALIAS; document.body.appendChild(t);
+      t.select(); try { document.execCommand('copy'); } catch (_) {} t.remove();
+    }
+    boton.textContent = '¡Alias copiado!';
+    setTimeout(() => boton.textContent = 'Copiar alias', 2200);
+  });
 </script>
 </body>
 </html>
