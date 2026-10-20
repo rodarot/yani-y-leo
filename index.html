@@ -176,7 +176,6 @@
         <path d="M46 6v-8M33 10l-5-6M59 10l5-6"/>
       </svg>
 
-      <button class="indicacion" id="indicacion">Tocá los anillos</button>
     </main>
 
     <a class="deslizar" id="deslizar" href="#regalo">
@@ -194,7 +193,6 @@
   const regalo = document.getElementById('regalo');
   const irAlRegalo = () => regalo.scrollIntoView({ behavior:'smooth', block:'start' });
   document.getElementById('abrir').addEventListener('click', irAlRegalo);
-  document.getElementById('indicacion').addEventListener('click', irAlRegalo);
 
   const flecha = document.getElementById('deslizar');
   addEventListener('scroll', () => flecha.classList.toggle('oculto', scrollY > 40), { passive:true });
